@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    { "source": "/robots.txt", "destination": "/SEO/robots.txt" },
+    { "source": "/sitemap.xml", "destination": "/SEO/sitemap.xml" },
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/gallery", "destination": "/gallery.html" },
+    { "source": "/blog", "destination": "/blog.html" },
+    { "source": "/locations", "destination": "/locations.html" },
+    { "source": "/services", "destination": "/services.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/blog/:slug", "destination": "/blog/:slug.html" },
+    { "source": "/locations/:slug", "destination": "/locations/:slug.html" },
+    { "source": "/services/:slug", "destination": "/services/:slug.html" }
+  ]
+}
