@@ -4,7 +4,9 @@ Set these in Vercel Project Settings -> Environment Variables:
 
 - `TWILIO_ACCOUNT_SID` = your Twilio Account SID
 - `TWILIO_AUTH_TOKEN` = your Twilio Auth Token
-- `ALERT_TO_PHONE` = your personal phone in E.164 format (example: `+17633709944`)
+- Receiving number (set one):
+  - `ALERT_TO_PHONE` = your personal phone in E.164 format
+  - `TWILIO_TO_NUMBER` = same purpose (supported alias)
 
 Choose one sending method:
 

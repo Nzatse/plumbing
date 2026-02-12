@@ -39,10 +39,19 @@ module.exports = async function handler(req, res) {
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   const twilioFrom = process.env.TWILIO_FROM_NUMBER;
   const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
-  const toNumber = process.env.ALERT_TO_PHONE;
+  const toNumber = process.env.ALERT_TO_PHONE || process.env.TWILIO_TO_NUMBER;
 
   if (!accountSid || !authToken || !toNumber || (!twilioFrom && !messagingServiceSid)) {
-    sendJson(res, 500, { ok: false, error: "Twilio server config missing" });
+    sendJson(res, 500, {
+      ok: false,
+      error: "Twilio server config missing",
+      required: [
+        "TWILIO_ACCOUNT_SID",
+        "TWILIO_AUTH_TOKEN",
+        "TWILIO_FROM_NUMBER or TWILIO_MESSAGING_SERVICE_SID",
+        "ALERT_TO_PHONE or TWILIO_TO_NUMBER"
+      ]
+    });
     return;
   }
 
@@ -99,4 +108,3 @@ module.exports = async function handler(req, res) {
     sendJson(res, 500, { ok: false, error: "Server error" });
   }
 };
-
