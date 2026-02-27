@@ -8,7 +8,8 @@
     window.SkyviewChatConfig = Object.assign({}, window.SkyviewChatConfig || {}, {
       endpoint: "/api/chat-submit",
       callHref: CALL_HREF,
-      termsHref: "/terms.html",
+      termsHref: "/terms",
+      privacyHref: "/privacy-policy",
       launcherText: "GET A QUOTE",
       title: "GET A QUOTE",
       showLauncher: false,
@@ -66,6 +67,40 @@
         return part.charAt(0).toUpperCase() + part.slice(1);
       })
       .join(" ");
+  }
+
+  function injectBusinessSchema() {
+    if (document.getElementById("sv-business-schema")) return;
+    var script = document.createElement("script");
+    script.id = "sv-business-schema";
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Plumber",
+      name: "Skyview Plumbing",
+      url: "https://skyviewplumbingmn.com",
+      telephone: "+1-763-370-9944",
+      email: "info@skyviewplumbingmn.com",
+      description: "Skyview Plumbing provides 24/7 emergency plumbing, water heater installation, drain cleaning, and residential plumbing services across the Twin Cities metro in Minnesota.",
+      areaServed: {
+        "@type": "AdministrativeArea",
+        name: "Twin Cities Metropolitan Area, Minnesota"
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Minneapolis",
+        addressRegion: "MN",
+        addressCountry: "US"
+      },
+      openingHoursSpecification: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        opens: "00:00",
+        closes: "23:59"
+      },
+      priceRange: "$$"
+    });
+    document.head.appendChild(script);
   }
 
   function injectPageSchema() {
@@ -182,21 +217,32 @@
     });
   }
 
-  function addSmartCtaBlock() {
-    var root = document.getElementById("root");
-    if (!root) return;
-    if (document.querySelector(".sv-smart-cta")) return;
+  function addFooterLegalLinks() {
+    var allPs = document.querySelectorAll("footer p");
+    var footerP = null;
+    for (var i = 0; i < allPs.length; i++) {
+      if ((allPs[i].textContent || "").includes("All rights reserved")) {
+        footerP = allPs[i];
+        break;
+      }
+    }
+    if (!footerP || footerP.getAttribute("data-sv-legal-links")) return;
+    footerP.setAttribute("data-sv-legal-links", "true");
 
-    var block = document.createElement("section");
-    block.className = "sv-smart-cta";
-    block.innerHTML =
-      '<h3>Need Fast Plumbing Help?</h3>' +
-      '<p>Talk to a licensed local plumber now. Emergency service is available 24/7.</p>' +
-      '<div class="sv-smart-cta-actions">' +
-      '<a class="sv-smart-cta-primary" href="tel:+17633709944">Call (763) 370-9944</a>' +
-      '<a class="sv-smart-cta-secondary" href="/services">View Services</a>' +
-      "</div>";
-    root.appendChild(block);
+    var linkStyle = "color:inherit;text-decoration:underline;opacity:0.7;";
+    var sep = document.createElement("span");
+    sep.innerHTML =
+      " &nbsp;&bull;&nbsp; " +
+      '<a href="/terms" style="' + linkStyle + '">Terms &amp; Conditions</a>' +
+      " &nbsp;&bull;&nbsp; " +
+      '<a href="/privacy-policy" style="' + linkStyle + '">Privacy Policy</a>';
+    footerP.appendChild(sep);
+  }
+
+  function fixTelLinks() {
+    document.querySelectorAll('a[href="tel:7633709944"]').forEach(function (a) {
+      a.href = "tel:+17633709944";
+    });
   }
 
   function tightenMobileNavBehavior() {
@@ -222,7 +268,9 @@
     addSkipLink();
     addMobileCallPill();
     wireReveal();
-    addSmartCtaBlock();
+    addFooterLegalLinks();
+    fixTelLinks();
+    injectBusinessSchema();
     injectPageSchema();
     tightenMobileNavBehavior();
   }

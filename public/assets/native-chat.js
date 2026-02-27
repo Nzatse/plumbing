@@ -5,7 +5,8 @@
   var config = Object.assign(
     {
       endpoint: "/api/chat-submit",
-      termsHref: "/terms.html",
+      termsHref: "/terms",
+      privacyHref: "/privacy-policy",
       callHref: "tel:+17633709944",
       launcherText: "GET A QUOTE",
       title: "GET A QUOTE",
@@ -26,7 +27,8 @@
     name: "Full Name is required",
     phone: "Phone is required",
     message: "Short message about your needs is required",
-    terms: "Please accept the terms and conditions"
+    terms: "Please agree to the terms to continue",
+    privacy: "Please accept the SMS consent to continue"
   };
 
   function createPanel(isInline) {
@@ -56,9 +58,16 @@
       '<div class="sv-chat-field">' +
       '<div class="sv-chat-consent">' +
       '<input type="checkbox" data-field="terms" name="terms" />' +
-      '<label>I agree to <a class="sv-chat-terms-link" target="_blank" rel="noopener noreferrer">terms &amp; conditions</a> provided by the company. By providing my phone number, I agree to receive text messages from the business.</label>' +
+      '<label>By providing my phone number, I agree to receive text messages from Skyview Plumbing. View our <a class="sv-chat-terms-link" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</a>.</label>' +
       "</div>" +
       '<p class="sv-chat-error" data-error-for="terms"></p>' +
+      "</div>" +
+      '<div class="sv-chat-field">' +
+      '<div class="sv-chat-consent">' +
+      '<input type="checkbox" data-field="privacy" name="privacy" />' +
+      '<label>By checking this box, I agree to receive SMS messages from Skyview Plumbing regarding appointments, service updates, and promotional offers. Message frequency varies. Message &amp; data rates may apply. Reply STOP to opt out or HELP for assistance. <a class="sv-chat-privacy-link" target="_blank" rel="noopener noreferrer">View our Privacy Policy</a>.</label>' +
+      "</div>" +
+      '<p class="sv-chat-error" data-error-for="privacy"></p>' +
       "</div>" +
       '<p class="sv-chat-success" aria-live="polite">Thanks, your message has been sent.</p>' +
       '<div class="sv-chat-actions">' +
@@ -69,6 +78,7 @@
 
     panel.querySelector(".sv-chat-title").textContent = config.title;
     panel.querySelector(".sv-chat-terms-link").href = config.termsHref;
+    panel.querySelector(".sv-chat-privacy-link").href = config.privacyHref;
     return panel;
   }
 
@@ -96,7 +106,8 @@
       name: form.querySelector('[data-field="name"]'),
       phone: form.querySelector('[data-field="phone"]'),
       message: form.querySelector('[data-field="message"]'),
-      terms: form.querySelector('[data-field="terms"]')
+      terms: form.querySelector('[data-field="terms"]'),
+      privacy: form.querySelector('[data-field="privacy"]')
     };
 
     function setError(key, message) {
@@ -134,6 +145,11 @@
         valid = false;
       }
 
+      if (!fields.privacy.checked) {
+        setError("privacy", ERROR_COPY.privacy);
+        valid = false;
+      }
+
       return valid;
     }
 
@@ -164,6 +180,7 @@
           phone: fields.phone.value.trim(),
           message: fields.message.value.trim(),
           termsAccepted: fields.terms.checked,
+          privacyAccepted: fields.privacy.checked,
           page: window.location.href,
           submittedAt: new Date().toISOString()
         };
@@ -256,6 +273,26 @@
     attempts += 1;
     if (tryInlineMount() || attempts > 12) clearInterval(inlineTimer);
   }, 400);
+
+  // Watch for SPA client-side navigation: re-mount whenever the inline
+  // container is re-created by React (e.g. user navigates away and back).
+  var inlineDomObserver = new MutationObserver(function (mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      var added = mutations[i].addedNodes;
+      for (var j = 0; j < added.length; j++) {
+        var node = added[j];
+        if (node.nodeType !== 1) continue;
+        if (
+          (node.matches && node.matches(config.inlineSelector)) ||
+          (node.querySelector && node.querySelector(config.inlineSelector))
+        ) {
+          tryInlineMount();
+          return;
+        }
+      }
+    }
+  });
+  inlineDomObserver.observe(document.documentElement, { childList: true, subtree: true });
 
   window.SkyviewNativeChat = {
     open: function () {
