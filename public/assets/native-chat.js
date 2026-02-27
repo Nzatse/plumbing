@@ -274,6 +274,26 @@
     if (tryInlineMount() || attempts > 12) clearInterval(inlineTimer);
   }, 400);
 
+  // Watch for SPA client-side navigation: re-mount whenever the inline
+  // container is re-created by React (e.g. user navigates away and back).
+  var inlineDomObserver = new MutationObserver(function (mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      var added = mutations[i].addedNodes;
+      for (var j = 0; j < added.length; j++) {
+        var node = added[j];
+        if (node.nodeType !== 1) continue;
+        if (
+          (node.matches && node.matches(config.inlineSelector)) ||
+          (node.querySelector && node.querySelector(config.inlineSelector))
+        ) {
+          tryInlineMount();
+          return;
+        }
+      }
+    }
+  });
+  inlineDomObserver.observe(document.documentElement, { childList: true, subtree: true });
+
   window.SkyviewNativeChat = {
     open: function () {
       setOpen(true);
