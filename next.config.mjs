@@ -15,6 +15,11 @@ const nextConfig = {
       { source: "/services/:slug.html", destination: "/services/:slug", permanent: true },
       { source: "/blog/:slug.html", destination: "/blog/:slug", permanent: true },
       { source: "/locations/:slug.html", destination: "/locations/:slug", permanent: true },
+      // Legacy service slugs → canonical slugs (301 permanent)
+      { source: "/services/bathtubs", destination: "/services/shower-bathtub-services", permanent: true },
+      { source: "/services/piping-repiping", destination: "/services/pipe-installation-repiping", permanent: true },
+      { source: "/services/garbage-disposals", destination: "/services/garbage-disposal-services", permanent: true },
+      { source: "/services/gas-lines", destination: "/services/gas-line-services", permanent: true },
     ];
   },
 };

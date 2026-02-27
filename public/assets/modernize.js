@@ -69,6 +69,40 @@
       .join(" ");
   }
 
+  function injectBusinessSchema() {
+    if (document.getElementById("sv-business-schema")) return;
+    var script = document.createElement("script");
+    script.id = "sv-business-schema";
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Plumber",
+      name: "Skyview Plumbing",
+      url: "https://skyviewplumbingmn.com",
+      telephone: "+1-763-370-9944",
+      email: "info@skyviewplumbingmn.com",
+      description: "Skyview Plumbing provides 24/7 emergency plumbing, water heater installation, drain cleaning, and residential plumbing services across the Twin Cities metro in Minnesota.",
+      areaServed: {
+        "@type": "AdministrativeArea",
+        name: "Twin Cities Metropolitan Area, Minnesota"
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Minneapolis",
+        addressRegion: "MN",
+        addressCountry: "US"
+      },
+      openingHoursSpecification: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        opens: "00:00",
+        closes: "23:59"
+      },
+      priceRange: "$$"
+    });
+    document.head.appendChild(script);
+  }
+
   function injectPageSchema() {
     var old = document.getElementById("sv-page-schema");
     if (old) old.remove();
@@ -236,6 +270,7 @@
     wireReveal();
     addFooterLegalLinks();
     fixTelLinks();
+    injectBusinessSchema();
     injectPageSchema();
     tightenMobileNavBehavior();
   }
