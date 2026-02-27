@@ -205,9 +205,7 @@ body.modernized .sv-smart-cta-secondary {
 }
 
 body.modernized .sv-offer-pop {
-  animation: sv-offer-pop 1.15s ease-in-out infinite;
-  transform-origin: center;
-  will-change: transform, box-shadow, filter;
+  display: none !important;
 }
 
 @keyframes sv-offer-pop {
