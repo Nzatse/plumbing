@@ -1,0 +1,33 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+nav ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  padding: 1rem;
+  margin: 0;
+  background-color: #1a3c5e;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+main {
+  padding: 2rem;
+}
+
+footer {
+  padding: 1rem 2rem;
+  background-color: #1a3c5e;
+  color: #fff;
+  text-align: center;
+}
