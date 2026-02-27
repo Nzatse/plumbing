@@ -9,6 +9,7 @@
       endpoint: "/api/chat-submit",
       callHref: CALL_HREF,
       termsHref: "/terms",
+      privacyHref: "/privacy-policy",
       launcherText: "GET A QUOTE",
       title: "GET A QUOTE",
       showLauncher: false,

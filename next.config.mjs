@@ -10,6 +10,7 @@ const nextConfig = {
       { source: "/gallery.html", destination: "/gallery", permanent: true },
       { source: "/blog.html", destination: "/blog", permanent: true },
       { source: "/terms.html", destination: "/terms", permanent: true },
+      { source: "/privacy-policy.html", destination: "/privacy-policy", permanent: true },
       // Sub-page .html → clean paths (301 permanent)
       { source: "/services/:slug.html", destination: "/services/:slug", permanent: true },
       { source: "/blog/:slug.html", destination: "/blog/:slug", permanent: true },

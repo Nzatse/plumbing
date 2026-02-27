@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ViteLoader from "./components/ViteLoader";
+import ViteLoader from "../components/ViteLoader";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://skyviewplumbingmn.com"),
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   verification: { google: "REPLACE_WITH_GOOGLE_SITE_VERIFICATION" },
 };
 
-export default function RootLayout({
+export default function SpaLayout({
   children,
 }: {
   children: React.ReactNode;
