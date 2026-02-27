@@ -8,7 +8,7 @@
     window.SkyviewChatConfig = Object.assign({}, window.SkyviewChatConfig || {}, {
       endpoint: "/api/chat-submit",
       callHref: CALL_HREF,
-      termsHref: "/terms.html",
+      termsHref: "/terms",
       launcherText: "GET A QUOTE",
       title: "GET A QUOTE",
       showLauncher: false,

@@ -5,7 +5,7 @@
   var config = Object.assign(
     {
       endpoint: "/api/chat-submit",
-      termsHref: "/terms.html",
+      termsHref: "/terms",
       callHref: "tel:+17633709944",
       launcherText: "GET A QUOTE",
       title: "GET A QUOTE",
