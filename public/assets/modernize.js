@@ -11,7 +11,7 @@
       termsHref: "/terms",
       privacyHref: "/privacy-policy",
       launcherText: "GET A QUOTE",
-      title: "GET A QUOTE",
+      title: "GET A QUOTE.",
       showLauncher: false,
       inlineSelector: ".sv-native-quote-inline"
     });
