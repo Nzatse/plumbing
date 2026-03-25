@@ -626,13 +626,13 @@
       // Marketing consent
       '<div class="sv-chat-field"><div class="sv-chat-consent">' +
       '<input type="checkbox" data-field="marketing" name="marketing" />' +
-      '<label>I consent to receive marketing text messages from Skyview Plumbing including promotional offers, discounts, and related marketing communications at the phone number provided. Frequency may vary. Message & data rates may apply. Text HELP for assistance, reply STOP to opt out.</label>' +
+      '<label>I consent to receive marketing text messages from Skyview Plumbing LLC including promotional offers, discounts, and related marketing communications at the phone number provided. Frequency may vary. Message & data rates may apply. Text HELP for assistance, reply STOP to opt out.</label>' +
       '</div></div>' +
 
       // Non-marketing consent
       '<div class="sv-chat-field"><div class="sv-chat-consent">' +
       '<input type="checkbox" data-field="nonMarketing" name="nonMarketing" />' +
-      '<label>I consent to receive non-marketing text messages from Skyview Plumbing about my appointment scheduling, appointment reminders, application updates, consultation notifications, and other account-related information. Frequency may vary. Message & data rates may apply. Text HELP for assistance, reply STOP to opt out.</label>' +
+      '<label>I consent to receive non-marketing text messages from Skyview Plumbing LLC about my appointment scheduling, appointment reminders, application updates, consultation notifications, and other account-related information. Frequency may vary. Message & data rates may apply. Text HELP for assistance, reply STOP to opt out.</label>' +
       '</div></div>' +
 
       // Legal

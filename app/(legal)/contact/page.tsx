@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-
+import Header from "../../components/Header"
+import Footer from "@/app/components/Footer";
 export const metadata: Metadata = {
   title: "Contact Us | Skyview Plumbing",
   description:
@@ -24,10 +25,11 @@ const YEAR = new Date().getFullYear();
 export default function ContactPage() {
   return (
     <>
+      <Header />
       <style dangerouslySetInnerHTML={{ __html: contactStyles }} />
       <main className="contact-wrap">
         <a className="contact-back" href="/">
-          &#8592; Back to Skyview Plumbing
+          &#8592; Back to Skyview Plumbing LLC
         </a>
 
         <header className="contact-header">
@@ -100,15 +102,17 @@ export default function ContactPage() {
           </section>
         </div>
 
-        <footer className="contact-footer">
+        {/* <footer className="contact-footer">
           &copy; {YEAR} Skyview Plumbing. All rights reserved. &mdash;{" "}
           <a href="/terms">Terms &amp; Conditions</a> &mdash;{" "}
           <a href="/privacy-policy">Privacy Policy</a>
-        </footer>
+        </footer> */}
       </main>
 
       {/* Load the native chat form script */}
       <Script src="/assets/native-chat.js" strategy="afterInteractive" />
+
+      <Footer />
     </>
   );
 }

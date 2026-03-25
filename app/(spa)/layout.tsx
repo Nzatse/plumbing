@@ -43,12 +43,12 @@ export default function SpaLayout({
         <ViteLoader />
 
         {/* Inline script to add "Contact" link dynamically */}
-<script
-  dangerouslySetInnerHTML={{
-    __html: `
-      (function waitForMenu() {
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+      (function waitForMenuAndFooter() {
         // Add Contact link
-        function addLink() {
+        function addContactLink() {
           var menu = document.querySelector('.flex.justify-between.items-center.h-24 > div.hidden.lg\\\\:flex.items-center.gap-6');
           if (menu && !menu.querySelector('a[href="/contact"]')) {
             var link = document.createElement('a');
@@ -56,16 +56,35 @@ export default function SpaLayout({
             link.textContent = 'Contact Us';
             link.className = 'font-heading font-medium text-foreground hover:text-primary transition-colors';
             menu.appendChild(link);
-            console.log('Contact link added!');
+          }
+        }
+
+        // Append LLC to footer logo
+        function appendLLCLogo() {
+          var footerLogo = document.querySelector('footer a.flex.items-center.gap-3 h3');
+          if (footerLogo && !footerLogo.textContent.includes('LLC')) {
+            footerLogo.textContent += ' LLC';
+          }
+        }
+
+        // Append LLC to copyright
+        function appendLLCCopyright() {
+          var copyrightEl = document.querySelector('p[data-sv-legal-links="true"]');
+          if (copyrightEl && !copyrightEl.textContent.includes('LLC')) {
+            copyrightEl.innerHTML = copyrightEl.innerHTML.replace('Skyview Plumbing.', 'Skyview Plumbing LLC.');
           }
         }
 
         // Initial attempt
-        addLink();
+        addContactLink();
+        appendLLCLogo();
+        appendLLCCopyright();
 
-        // Retry until menu exists
+        // Retry until menu & footer exist
         var retryInterval = setInterval(function() {
-          addLink();
+          addContactLink();
+          appendLLCLogo();
+          appendLLCCopyright();
         }, 100);
 
         // Stop retry after 5 seconds
@@ -73,18 +92,15 @@ export default function SpaLayout({
           clearInterval(retryInterval);
         }, 5000);
 
-        // === Reload page on route change ===
+        // Reload on SPA route change
         var lastPath = window.location.pathname;
-
         function checkRouteChange() {
           if (window.location.pathname !== lastPath) {
             lastPath = window.location.pathname;
-            console.log('Route changed, reloading page...');
             window.location.reload();
           }
         }
 
-        // Listen to SPA navigation events
         window.addEventListener('popstate', checkRouteChange);
         var pushState = history.pushState;
         history.pushState = function() {
@@ -93,8 +109,8 @@ export default function SpaLayout({
         };
       })();
     `,
-  }}
-/>
+          }}
+        />
       </body>
     </html>
   );
