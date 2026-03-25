@@ -140,7 +140,7 @@ export default function PrivacyPolicyPage() {
         </ul>
 
         <h2 id="info-share">3. Will Your Information Be Shared with Anyone?</h2>
-        <p>
+        {/* <p>
           We only share your personal information in limited circumstances and never sell it
           to third parties. Specifically, we may share your information:
         </p>
@@ -168,7 +168,15 @@ export default function PrivacyPolicyPage() {
             it is necessary to investigate, prevent, or act regarding potential violations of
             our policies, fraud, or threats to the safety of any person.
           </li>
-        </ul>
+        </ul> */}
+
+        <p>
+          We do not sell, rent, or share your personal information with third-party companies for their marketing purposes.
+        </p>
+
+        <p>
+          No mobile information will be shared with third parties/affiliates for marketing/promotional purposes. Information sharing to subcontractors in support services, such as customer service, is permitted. All other use case categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties.
+        </p>
 
         <h2 id="cookies">4. Do We Use Cookies and Other Tracking Technologies?</h2>
         <p>

@@ -41,8 +41,61 @@ export default function SpaLayout({
         {children}
         {/* Loads Vite bundle + modernize.js after Next.js hydration to avoid mismatches */}
         <ViteLoader />
+
+        {/* Inline script to add "Contact" link dynamically */}
+<script
+  dangerouslySetInnerHTML={{
+    __html: `
+      (function waitForMenu() {
+        // Add Contact link
+        function addLink() {
+          var menu = document.querySelector('.flex.justify-between.items-center.h-24 > div.hidden.lg\\\\:flex.items-center.gap-6');
+          if (menu && !menu.querySelector('a[href="/contact"]')) {
+            var link = document.createElement('a');
+            link.href = '/contact';
+            link.textContent = 'Contact Us';
+            link.className = 'font-heading font-medium text-foreground hover:text-primary transition-colors';
+            menu.appendChild(link);
+            console.log('Contact link added!');
+          }
+        }
+
+        // Initial attempt
+        addLink();
+
+        // Retry until menu exists
+        var retryInterval = setInterval(function() {
+          addLink();
+        }, 100);
+
+        // Stop retry after 5 seconds
+        setTimeout(function() {
+          clearInterval(retryInterval);
+        }, 5000);
+
+        // === Reload page on route change ===
+        var lastPath = window.location.pathname;
+
+        function checkRouteChange() {
+          if (window.location.pathname !== lastPath) {
+            lastPath = window.location.pathname;
+            console.log('Route changed, reloading page...');
+            window.location.reload();
+          }
+        }
+
+        // Listen to SPA navigation events
+        window.addEventListener('popstate', checkRouteChange);
+        var pushState = history.pushState;
+        history.pushState = function() {
+          pushState.apply(this, arguments);
+          checkRouteChange();
+        };
+      })();
+    `,
+  }}
+/>
       </body>
     </html>
   );
 }
-
