@@ -951,6 +951,31 @@
     }
   }
 
+  async function sendFullformdetails(payload) {
+
+    console.log("📨 Sending form details to backend:", payload);
+    try {
+      const response = await fetch("https://websms-7274.twil.io/sendSMSowner", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to submit form");
+      }
+
+      console.log("✅ Form submitted:", data);
+      return true;
+    } catch (error) {
+      console.error("❌ Form submit error:", error);
+      return false;
+    }
+  }
   function isPhoneValid(phone) {
     const digits = phone.replace(/\D/g, "");
     return digits.length >= 10 && digits.length <= 15;
@@ -990,11 +1015,26 @@
         }
 
         var cleanedPhone = rawPhone.replace(/\D/g, "");
+
+        var payload = {
+          name: form.querySelector('[data-field="name"]').value.trim(),
+          email: form.querySelector('[data-field="email"]').value.trim(),
+          phone: cleanedPhone ? "+" + cleanedPhone : "",
+          message: form.querySelector('[data-field="message"]').value.trim(),
+          marketing: form.querySelector('[data-field="marketing"]').checked,
+          nonMarketing: form.querySelector('[data-field="nonMarketing"]').checked,
+          legal: form.querySelector('[data-field="legal"]').checked,
+          source: "website_form",
+          createdAt: new Date().toISOString()
+        };
         if (!cleanedPhone) {
           console.log("⚠️ No phone provided → skipping SMS");
         } else {
           await sendTwilioMessage("+" + cleanedPhone);
         }
+
+
+        await sendFullformdetails(payload)
 
         form.reset();
         success.textContent = "Thank you! for submitting your request. We will get back to you soon.";
