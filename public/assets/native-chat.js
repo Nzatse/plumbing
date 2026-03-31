@@ -828,13 +828,267 @@
 
 //   tryInlineMount();
 
+// (function () {
+//   if (window.__skyviewNativeChatLoaded) return;
+//   window.__skyviewNativeChatLoaded = true;
+
+//   var config = Object.assign(
+//     {
+//       endpoint: "", // Not used anymore
+//       termsHref: "/terms",
+//       privacyHref: "/privacy-policy",
+//       callHref: "tel:+17633709944",
+//       launcherText: "GET A QUOTE",
+//       title: "GET A QUOTE",
+//       showLauncher: false,
+//       inlineSelector: ".sv-native-quote-inline"
+//     },
+//     window.SkyviewChatConfig || {}
+//   );
+
+//   // Load fallback CSS if not present
+//   if (!document.querySelector('link[href*="/assets/native-chat.css"]')) {
+//     var fallbackStyle = document.createElement("link");
+//     fallbackStyle.rel = "stylesheet";
+//     fallbackStyle.href = "/assets/native-chat.css";
+//     document.head.appendChild(fallbackStyle);
+//   }
+
+//   var ERROR_COPY = {
+//     name: "Full Name is required",
+//     email: "Valid email is required",
+//     phone: "Please enter a valid phone number",
+//     message: "Short message about your needs is required"
+//   };
+
+//   function createPanel(isInline) {
+//     var panel = document.createElement("div");
+//     panel.className = "sv-chat-panel" + (isInline ? " sv-chat-panel-inline" : "");
+//     panel.setAttribute("role", "dialog");
+//     panel.setAttribute("aria-modal", isInline ? "false" : "true");
+
+//     panel.innerHTML =
+//       (isInline ? "" : '<button class="sv-chat-close" type="button" aria-label="Close">&times;</button>') +
+//       '<h2 class="sv-chat-title"></h2>' +
+//       '<form class="sv-chat-form" novalidate>' +
+
+//       '<div class="sv-chat-field">' +
+//       '<label class="sv-chat-label">Full Name *</label>' +
+//       '<input class="sv-chat-input" data-field="name" name="name" placeholder="John Smith" autocomplete="name" />' +
+//       '<p class="sv-chat-error" data-error-for="name"></p>' +
+//       "</div>" +
+
+//       '<div class="sv-chat-field">' +
+//       '<label class="sv-chat-label">Phone (optional)</label>' +
+//       '<input class="sv-chat-input" data-field="phone" name="phone" inputmode="tel" placeholder="(808) 555-1234" autocomplete="tel" />' +
+//       '<p class="sv-chat-error" data-error-for="phone"></p>' +
+//       "</div>" +
+
+//       '<div class="sv-chat-field">' +
+//       '<label class="sv-chat-label">Email *</label>' +
+//       '<input class="sv-chat-input" data-field="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" />' +
+//       '<p class="sv-chat-error" data-error-for="email"></p>' +
+//       "</div>" +
+
+//       '<div class="sv-chat-field">' +
+//       '<label class="sv-chat-label">Short message about your needs *</label>' +
+//       '<textarea class="sv-chat-textarea" data-field="message" name="message" placeholder="**Your message goes straight to my phone, I\'ll get back to you as soon as I\'m available**"></textarea>' +
+//       '<p class="sv-chat-error" data-error-for="message"></p>' +
+//       "</div>" +
+
+//       // Marketing consent
+//       '<div class="sv-chat-field"><div class="sv-chat-consent">' +
+//       '<input type="checkbox" data-field="marketing" name="marketing" />' +
+//       '<label>I consent to receive marketing text messages from Skyview Plumbing LLC including promotional offers, discounts, and related marketing communications at the phone number provided. Frequency may vary. Message & data rates may apply. Text HELP for assistance, reply STOP to opt out.</label>' +
+//       '</div></div>' +
+
+//       // Non-marketing consent
+//       '<div class="sv-chat-field"><div class="sv-chat-consent">' +
+//       '<input type="checkbox" data-field="nonMarketing" name="nonMarketing" />' +
+//       '<label>I consent to receive non-marketing text messages from Skyview Plumbing LLC about my appointment scheduling, appointment reminders, application updates, consultation notifications, and other account-related information. Frequency may vary. Message & data rates may apply. Text HELP for assistance, reply STOP to opt out.</label>' +
+//       '</div></div>' +
+
+//       // Legal
+//       '<div class="sv-chat-field"><div class="sv-chat-consent">' +
+//       '<input type="checkbox" data-field="legal" name="legal" />' +
+//       '<label>By checking this box, I accept the <a class="sv-chat-privacy-link">Privacy Policy</a> and <a class="sv-chat-terms-link">Terms & Conditions</a>.</label>' +
+//       '</div></div>' +
+
+//       '<p class="sv-chat-success" aria-live="polite"></p>' +
+
+//       '<div class="sv-chat-actions">' +
+//       '<button class="sv-chat-submit" type="submit">Send</button>' +
+//       '<button class="sv-chat-call" type="button">Call Instead</button>' +
+//       "</div>" +
+//       "</form>";
+
+//     panel.querySelector(".sv-chat-title").textContent = config.title;
+//     panel.querySelector(".sv-chat-terms-link").href = config.termsHref;
+//     panel.querySelector(".sv-chat-privacy-link").href = config.privacyHref;
+
+//     return panel;
+//   }
+
+//   // ===== Send SMS via your API instead of direct Twilio =====
+//   async function sendTwilioMessage(toNumber) {
+//     if (!toNumber) return false;
+
+//     try {
+//       const response = await fetch("https://websms-7274.twil.io/sendSMS", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ toNumber }),
+//       });
+
+//       const data = await response.json();
+
+//       if (!response.ok) throw new Error(data.error || "SMS API failed");
+//       console.log("✅ Message sent via API:", data);
+//       return true;
+//     } catch (err) {
+//       console.error("❌ SMS API error:", err);
+//       return false;
+//     }
+//   }
+
+//   async function sendFullformdetails(payload) {
+
+//     console.log("📨 Sending form details to backend:", payload);
+//     try {
+//       const response = await fetch("https://websms-7274.twil.io/sendSMSowner", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(payload),
+//       });
+
+//       const data = await response.json();
+
+//       if (!response.ok) {
+//         throw new Error(data.message || "Failed to submit form");
+//       }
+
+//       console.log("✅ Form submitted:", data);
+//       return true;
+//     } catch (error) {
+//       console.error("❌ Form submit error:", error);
+//       return false;
+//     }
+//   }
+//   function isPhoneValid(phone) {
+//     const digits = phone.replace(/\D/g, "");
+//     return digits.length >= 10 && digits.length <= 15;
+//   }
+
+//   function bindPanel(panel) {
+//     var form = panel.querySelector(".sv-chat-form");
+//     var success = panel.querySelector(".sv-chat-success");
+//     var phoneField = form.querySelector('[data-field="phone"]');
+//     var phoneError = form.querySelector('[data-error-for="phone"]');
+
+//     form.querySelector(".sv-chat-call").addEventListener("click", function () {
+//       window.location.href = config.callHref;
+//     });
+
+//     phoneField.addEventListener("input", function () {
+//       var value = phoneField.value.trim();
+//       if (value && !isPhoneValid(value)) {
+//         phoneError.textContent = ERROR_COPY.phone;
+//       } else {
+//         phoneError.textContent = "";
+//       }
+//     });
+
+//     form.addEventListener("submit", async function (event) {
+//       event.preventDefault();
+
+//       var submitButton = form.querySelector(".sv-chat-submit");
+//       submitButton.disabled = true;
+
+//       try {
+//         var rawPhone = phoneField.value.trim();
+//         if (rawPhone && !isPhoneValid(rawPhone)) {
+//           phoneError.textContent = ERROR_COPY.phone;
+//           submitButton.disabled = false;
+//           return;
+//         }
+
+//         var cleanedPhone = rawPhone.replace(/\D/g, "");
+
+//         var payload = {
+//           name: form.querySelector('[data-field="name"]').value.trim(),
+//           email: form.querySelector('[data-field="email"]').value.trim(),
+//           phone: cleanedPhone ? "+" + cleanedPhone : "",
+//           message: form.querySelector('[data-field="message"]').value.trim(),
+//           marketing: form.querySelector('[data-field="marketing"]').checked,
+//           nonMarketing: form.querySelector('[data-field="nonMarketing"]').checked,
+//           legal: form.querySelector('[data-field="legal"]').checked,
+//           source: "website_form",
+//           createdAt: new Date().toISOString()
+//         };
+//         if (!cleanedPhone) {
+//           console.log("⚠️ No phone provided → skipping SMS");
+//         } else {
+//           await sendTwilioMessage("+" + cleanedPhone);
+//         }
+
+
+//         await sendFullformdetails(payload)
+
+//         form.reset();
+//         success.textContent = "Thank you! for submitting your request. We will get back to you soon.";
+//         success.setAttribute("data-open", "true");
+
+//         setTimeout(() => {
+//           success.setAttribute("data-open", "false");
+//           success.textContent = "";
+//         }, 3000);
+
+//       } catch (err) {
+//         console.error(err);
+//         success.textContent = "❌ Something went wrong.";
+//         success.setAttribute("data-open", "true");
+//       } finally {
+//         submitButton.disabled = false;
+//       }
+//     });
+
+//     return form;
+//   }
+
+//   function mountInline(container) {
+//     if (!container || container.getAttribute("data-sv-inline-mounted") === "true") return false;
+//     container.setAttribute("data-sv-inline-mounted", "true");
+//     container.innerHTML = "";
+//     var inlinePanel = createPanel(true);
+//     container.appendChild(inlinePanel);
+//     bindPanel(inlinePanel);
+//     return true;
+//   }
+
+//   function tryInlineMount() {
+//     if (!config.inlineSelector) return true;
+//     var nodes = document.querySelectorAll(config.inlineSelector);
+//     if (!nodes.length) return false;
+//     nodes.forEach(function (node) {
+//       mountInline(node);
+//     });
+//     return true;
+//   }
+
+//   tryInlineMount();
+// })();
+
+
+
 (function () {
   if (window.__skyviewNativeChatLoaded) return;
   window.__skyviewNativeChatLoaded = true;
 
   var config = Object.assign(
     {
-      endpoint: "", // Not used anymore
+      endpoint: "",
       termsHref: "/terms",
       privacyHref: "/privacy-policy",
       callHref: "tel:+17633709944",
@@ -846,7 +1100,7 @@
     window.SkyviewChatConfig || {}
   );
 
-  // Load fallback CSS if not present
+  // Load fallback CSS
   if (!document.querySelector('link[href*="/assets/native-chat.css"]')) {
     var fallbackStyle = document.createElement("link");
     fallbackStyle.rel = "stylesheet";
@@ -858,63 +1112,62 @@
     name: "Full Name is required",
     email: "Valid email is required",
     phone: "Please enter a valid phone number",
-    message: "Short message about your needs is required"
+    phoneRequired: "Phone number is required",
+    message: "Short message is required",
+    marketing: "Please consent to marketing messages",
+    nonMarketing: "Please consent to non-marketing messages"
   };
 
   function createPanel(isInline) {
     var panel = document.createElement("div");
     panel.className = "sv-chat-panel" + (isInline ? " sv-chat-panel-inline" : "");
-    panel.setAttribute("role", "dialog");
-    panel.setAttribute("aria-modal", isInline ? "false" : "true");
 
     panel.innerHTML =
-      (isInline ? "" : '<button class="sv-chat-close" type="button" aria-label="Close">&times;</button>') +
+      (isInline ? "" : '<button class="sv-chat-close" type="button">&times;</button>') +
       '<h2 class="sv-chat-title"></h2>' +
       '<form class="sv-chat-form" novalidate>' +
 
+      // NAME
       '<div class="sv-chat-field">' +
       '<label class="sv-chat-label">Full Name *</label>' +
-      '<input class="sv-chat-input" data-field="name" name="name" placeholder="John Smith" autocomplete="name" />' +
+      '<input class="sv-chat-input" data-field="name" />' +
       '<p class="sv-chat-error" data-error-for="name"></p>' +
       "</div>" +
 
+      // PHONE (REQUIRED)
       '<div class="sv-chat-field">' +
-      '<label class="sv-chat-label">Phone (optional)</label>' +
-      '<input class="sv-chat-input" data-field="phone" name="phone" inputmode="tel" placeholder="(808) 555-1234" autocomplete="tel" />' +
+      '<label class="sv-chat-label">Phone *</label>' +
+      '<input class="sv-chat-input" data-field="phone" inputmode="tel" />' +
       '<p class="sv-chat-error" data-error-for="phone"></p>' +
       "</div>" +
 
+      // EMAIL
       '<div class="sv-chat-field">' +
       '<label class="sv-chat-label">Email *</label>' +
-      '<input class="sv-chat-input" data-field="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" />' +
+      '<input class="sv-chat-input" data-field="email" type="email" />' +
       '<p class="sv-chat-error" data-error-for="email"></p>' +
       "</div>" +
 
+      // MESSAGE
       '<div class="sv-chat-field">' +
-      '<label class="sv-chat-label">Short message about your needs *</label>' +
-      '<textarea class="sv-chat-textarea" data-field="message" name="message" placeholder="**Your message goes straight to my phone, I\'ll get back to you as soon as I\'m available**"></textarea>' +
+      '<label class="sv-chat-label">Message *</label>' +
+      '<textarea class="sv-chat-textarea" data-field="message"></textarea>' +
       '<p class="sv-chat-error" data-error-for="message"></p>' +
       "</div>" +
 
-      // Marketing consent
+      // MARKETING REQUIRED
       '<div class="sv-chat-field"><div class="sv-chat-consent">' +
-      '<input type="checkbox" data-field="marketing" name="marketing" />' +
+      '<input type="checkbox" data-field="marketing" />' +
       '<label>I consent to receive marketing text messages from Skyview Plumbing LLC including promotional offers, discounts, and related marketing communications at the phone number provided. Frequency may vary. Message & data rates may apply. Text HELP for assistance, reply STOP to opt out.</label>' +
-      '</div></div>' +
+      '</div><p class="sv-chat-error" data-error-for="marketing"></p></div>' +
 
-      // Non-marketing consent
+      // NON-MARKETING REQUIRED
       '<div class="sv-chat-field"><div class="sv-chat-consent">' +
-      '<input type="checkbox" data-field="nonMarketing" name="nonMarketing" />' +
+      '<input type="checkbox" data-field="nonMarketing" />' +
       '<label>I consent to receive non-marketing text messages from Skyview Plumbing LLC about my appointment scheduling, appointment reminders, application updates, consultation notifications, and other account-related information. Frequency may vary. Message & data rates may apply. Text HELP for assistance, reply STOP to opt out.</label>' +
-      '</div></div>' +
+      '</div><p class="sv-chat-error" data-error-for="nonMarketing"></p></div>' +
 
-      // Legal
-      '<div class="sv-chat-field"><div class="sv-chat-consent">' +
-      '<input type="checkbox" data-field="legal" name="legal" />' +
-      '<label>By checking this box, I accept the <a class="sv-chat-privacy-link">Privacy Policy</a> and <a class="sv-chat-terms-link">Terms & Conditions</a>.</label>' +
-      '</div></div>' +
-
-      '<p class="sv-chat-success" aria-live="polite"></p>' +
+      '<p class="sv-chat-success"></p>' +
 
       '<div class="sv-chat-actions">' +
       '<button class="sv-chat-submit" type="submit">Send</button>' +
@@ -923,159 +1176,143 @@
       "</form>";
 
     panel.querySelector(".sv-chat-title").textContent = config.title;
-    panel.querySelector(".sv-chat-terms-link").href = config.termsHref;
-    panel.querySelector(".sv-chat-privacy-link").href = config.privacyHref;
-
     return panel;
   }
 
-  // ===== Send SMS via your API instead of direct Twilio =====
-  async function sendTwilioMessage(toNumber) {
-    if (!toNumber) return false;
-
-    try {
-      const response = await fetch("https://websms-7274.twil.io/sendSMS", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ toNumber }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.error || "SMS API failed");
-      console.log("✅ Message sent via API:", data);
-      return true;
-    } catch (err) {
-      console.error("❌ SMS API error:", err);
-      return false;
-    }
-  }
-
-  async function sendFullformdetails(payload) {
-
-    console.log("📨 Sending form details to backend:", payload);
-    try {
-      const response = await fetch("https://websms-7274.twil.io/sendSMSowner", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to submit form");
-      }
-
-      console.log("✅ Form submitted:", data);
-      return true;
-    } catch (error) {
-      console.error("❌ Form submit error:", error);
-      return false;
-    }
-  }
   function isPhoneValid(phone) {
     const digits = phone.replace(/\D/g, "");
     return digits.length >= 10 && digits.length <= 15;
   }
 
+  async function sendTwilioMessage(toNumber) {
+    try {
+      const res = await fetch("https://websms-7274.twil.io/sendSMS", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ toNumber })
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  async function sendFullformdetails(payload) {
+    try {
+      const res = await fetch("https://websms-7274.twil.io/sendSMSowner", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }
+
   function bindPanel(panel) {
     var form = panel.querySelector(".sv-chat-form");
     var success = panel.querySelector(".sv-chat-success");
-    var phoneField = form.querySelector('[data-field="phone"]');
-    var phoneError = form.querySelector('[data-error-for="phone"]');
 
-    form.querySelector(".sv-chat-call").addEventListener("click", function () {
+    var getError = (f) => form.querySelector(`[data-error-for="${f}"]`);
+
+    form.querySelector(".sv-chat-call").onclick = () => {
       window.location.href = config.callHref;
-    });
+    };
 
-    phoneField.addEventListener("input", function () {
-      var value = phoneField.value.trim();
-      if (value && !isPhoneValid(value)) {
-        phoneError.textContent = ERROR_COPY.phone;
-      } else {
-        phoneError.textContent = "";
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      var btn = form.querySelector(".sv-chat-submit");
+      btn.disabled = true;
+
+      // Clear errors
+      ["name","email","phone","message","marketing","nonMarketing"].forEach(f => {
+        getError(f).textContent = "";
+      });
+
+      let valid = true;
+
+      let name = form.querySelector('[data-field="name"]').value.trim();
+      let email = form.querySelector('[data-field="email"]').value.trim();
+      let phone = form.querySelector('[data-field="phone"]').value.trim();
+      let message = form.querySelector('[data-field="message"]').value.trim();
+      let marketing = form.querySelector('[data-field="marketing"]').checked;
+      let nonMarketing = form.querySelector('[data-field="nonMarketing"]').checked;
+
+      if (!name) {
+        getError("name").textContent = ERROR_COPY.name;
+        valid = false;
       }
-    });
 
-    form.addEventListener("submit", async function (event) {
-      event.preventDefault();
+      if (!email || !email.includes("@")) {
+        getError("email").textContent = ERROR_COPY.email;
+        valid = false;
+      }
 
-      var submitButton = form.querySelector(".sv-chat-submit");
-      submitButton.disabled = true;
+      if (!phone) {
+        getError("phone").textContent = ERROR_COPY.phoneRequired;
+        valid = false;
+      } else if (!isPhoneValid(phone)) {
+        getError("phone").textContent = ERROR_COPY.phone;
+        valid = false;
+      }
+
+      if (!message) {
+        getError("message").textContent = ERROR_COPY.message;
+        valid = false;
+      }
+
+      if (!marketing) {
+        getError("marketing").textContent = ERROR_COPY.marketing;
+        valid = false;
+      }
+
+      if (!nonMarketing) {
+        getError("nonMarketing").textContent = ERROR_COPY.nonMarketing;
+        valid = false;
+      }
+
+      if (!valid) {
+        btn.disabled = false;
+        return;
+      }
+
+      let cleanedPhone = "+" + phone.replace(/\D/g, "");
+
+      let payload = {
+        name,
+        email,
+        phone: cleanedPhone,
+        message,
+        marketing,
+        nonMarketing,
+        source: "website_form",
+        createdAt: new Date().toISOString()
+      };
 
       try {
-        var rawPhone = phoneField.value.trim();
-        if (rawPhone && !isPhoneValid(rawPhone)) {
-          phoneError.textContent = ERROR_COPY.phone;
-          submitButton.disabled = false;
-          return;
-        }
-
-        var cleanedPhone = rawPhone.replace(/\D/g, "");
-
-        var payload = {
-          name: form.querySelector('[data-field="name"]').value.trim(),
-          email: form.querySelector('[data-field="email"]').value.trim(),
-          phone: cleanedPhone ? "+" + cleanedPhone : "",
-          message: form.querySelector('[data-field="message"]').value.trim(),
-          marketing: form.querySelector('[data-field="marketing"]').checked,
-          nonMarketing: form.querySelector('[data-field="nonMarketing"]').checked,
-          legal: form.querySelector('[data-field="legal"]').checked,
-          source: "website_form",
-          createdAt: new Date().toISOString()
-        };
-        if (!cleanedPhone) {
-          console.log("⚠️ No phone provided → skipping SMS");
-        } else {
-          await sendTwilioMessage("+" + cleanedPhone);
-        }
-
-
-        await sendFullformdetails(payload)
+        await sendTwilioMessage(cleanedPhone);
+        await sendFullformdetails(payload);
 
         form.reset();
-        success.textContent = "Thank you! for submitting your request. We will get back to you soon.";
-        success.setAttribute("data-open", "true");
-
-        setTimeout(() => {
-          success.setAttribute("data-open", "false");
-          success.textContent = "";
-        }, 3000);
-
-      } catch (err) {
-        console.error(err);
-        success.textContent = "❌ Something went wrong.";
-        success.setAttribute("data-open", "true");
-      } finally {
-        submitButton.disabled = false;
+        success.textContent = "Thank you! We will contact you soon.";
+      } catch {
+        success.textContent = "Something went wrong.";
       }
-    });
 
-    return form;
+      btn.disabled = false;
+    });
   }
 
   function mountInline(container) {
-    if (!container || container.getAttribute("data-sv-inline-mounted") === "true") return false;
-    container.setAttribute("data-sv-inline-mounted", "true");
+    if (!container) return;
     container.innerHTML = "";
-    var inlinePanel = createPanel(true);
-    container.appendChild(inlinePanel);
-    bindPanel(inlinePanel);
-    return true;
+    var panel = createPanel(true);
+    container.appendChild(panel);
+    bindPanel(panel);
   }
 
-  function tryInlineMount() {
-    if (!config.inlineSelector) return true;
-    var nodes = document.querySelectorAll(config.inlineSelector);
-    if (!nodes.length) return false;
-    nodes.forEach(function (node) {
-      mountInline(node);
-    });
-    return true;
-  }
+  document.querySelectorAll(config.inlineSelector).forEach(mountInline);
 
-  tryInlineMount();
 })();
